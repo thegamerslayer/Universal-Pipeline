@@ -1,0 +1,12 @@
+services:
+  scraper:
+    build: .
+    environment:
+      - TARGET_URL=https://books.toscrape.com
+      - CONTAINER_SELECTOR=.product_pod
+      - 'FIELDS_TO_EXTRACT={
+          "name": {"selector": "h3 a", "type": "string", "required": true},
+          "price": {"selector": ".price_color", "type": "float", "required": true}
+        }'
+    volumes:
+      - ./output:/app/data
