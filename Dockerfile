@@ -1,22 +1,25 @@
-    # Step 1: Use a lightweight Python base
-    FROM python:3.12-slim
+# Use a slim Python base
+FROM python:3.12-slim
 
-    # Step 2: Set the folder where our app lives inside the "box"
-    WORKDIR /app
+# Install system dependencies if needed (none for now)
+# RUN apt-get update && apt-get install -y --no-install-recommends ...
 
-    # Step 3: Copy the list of tools needed
-    COPY app/requirements.txt .
+# Set working directory
+WORKDIR /app
 
-    # Step 4: Install the tools (no-cache-dir keeps the box small)
-    RUN pip install --no-cache-dir -r requirements.txt
+# Copy and install Python dependencies
+COPY app/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-    # Step 5: Copy your "Engine" (the scraper script) into the box
-    # Make sure your script is named 'scraper.py'
-    COPY app/ .
+# Copy the entire project
+COPY . .
 
-    # Tell Python that /app is a place to look for modules
-    ENV PYTHONPATH=/app
+# Set PYTHONPATH so 'app.core' and 'app.stages' are discoverable
+ENV PYTHONPATH=/app
 
-    # Step 6: The "Start Button"
-    # This tells Docker to run your script when the container turns on
-    CMD ["python", "scraper.py"]
+# Create a data directory for output
+RUN mkdir -p /app/data
+
+# Default command: Run the pipeline
+# The user can override this in docker-compose for the notebook service
+CMD ["python", "app/main.py"]

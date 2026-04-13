@@ -1,5 +1,14 @@
-# The "Tools" list
-
+# Core Requirements
 requests==2.31.0
 beautifulsoup4==4.12.3
 pydantic>=2.0.0
+PyYAML==6.0.1
+
+# Data Processing & ML
+pandas==2.2.1
+scikit-learn==1.4.1.post1
+
+# Notebook Support
+notebook==7.1.1
+ipykernel==6.29.3
+httpx<0.28.0

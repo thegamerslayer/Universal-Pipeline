@@ -1,0 +1,24 @@
+pipeline:
+  - name: "WebScraper"
+    module: "app.stages.scraper"
+    class: "ScrapeStage"
+    params:
+      target_url: "https://books.toscrape.com"
+      container_selector: ".product_pod"
+      fields_to_extract: |
+        {
+          "name": {"selector": "h3 a", "type": "string", "required": true},
+          "price": {"selector": ".price_color", "type": "float", "required": true}
+        }
+
+  - name: "DataTransformer"
+    module: "app.stages.transform"
+    class: "TransformStage"
+    params:
+      output_path: "/app/data/scraped_data.csv"
+
+  - name: "MLProcessor"
+    module: "app.stages.model"
+    class: "MLStage"
+    params:
+      random_state: 42
